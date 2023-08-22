@@ -1,16 +1,29 @@
-import {Text, View, TextInput, TouchableOpacity, ScrollView} from 'react-native';
+import {Text, View, TextInput, TouchableOpacity, FlatList, Alert} from 'react-native';
 
 import { styles } from './styles';
 import Participant from '../Components/Participant';
 
 const Home = () => {
-  const participants = ['Caio Borges Sella', 'Gabriela Leão', 'Luskas Martins', 'João Vitor', 'André Limonattions', 'Isa', 'Giovanna', 'João Guilherme', 'Pedro', 'Maria']
+  const participants = ['Caio', 'Gabriela Leão', 'Luskas Martins', 'João Vitor', 'André Limonattions', 'Isa', 'Giovanna', 'João Guilherme', 'Pedro', 'Maria']
 
   function handleParticipantAdd() {
+    if(participants.includes('Caio')) return Alert.alert('Participante existe', 'Já existe um participante na lista com este nome');
+
     console.log('Adcionou');
   }
 
   function handleParticipantRemove(name: string) {
+    Alert.alert('Remover', `Você realmente deseja remover o participante ${name}?`, [
+      {
+        text: 'Sim',
+        onPress: () => Alert.alert("Deletado!")
+      },
+      {
+        text: 'Não',
+        style: 'cancel'
+      }
+    ]);
+
     console.log(`Removeu ${name}`);
   }
 
@@ -41,16 +54,23 @@ const Home = () => {
         </TouchableOpacity>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {
-        participants.map( args =>
+      <FlatList
+        data={participants}
+        keyExtractor={item => item}
+        renderItem={({item}) => (
           <Participant
-            key={args}
-            name={args}
-            onRemove={() => handleParticipantRemove(args)}
-          />
+          key={item}
+          name={item}
+          onRemove={() => handleParticipantRemove(item)}
+        />
         )}
-      </ScrollView>
+        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={() => (
+          <Text style={styles.listEmptyText}>
+            Ninguém foi adcionado a lista ainda...
+          </Text>
+        )}
+      />
 
     </View>
   );
