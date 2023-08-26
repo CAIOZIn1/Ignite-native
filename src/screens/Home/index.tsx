@@ -9,6 +9,10 @@ const Home = () => {
   const [participantName, SetparticipantName] =  useState('');
 
   function handleParticipantAdd() {
+    if(participantName.trim() == ''){
+      return Alert.alert('Participante sem nome', 'Por favor ensira algum valor no campo antes de adicionar');
+    }
+
     if(participants.includes(participantName)) return Alert.alert('Participante existe', 'Já existe um participante na lista com este nome');
 
     setParticipants(prevState => [...prevState, participantName]);
@@ -29,8 +33,6 @@ const Home = () => {
         style: 'cancel'
       }
     ]);
-
-    console.log(`Removeu ${name}`);
   }
 
   return (
